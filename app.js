@@ -155,13 +155,13 @@ const NAV = [
       {id:'tema_overview', label:'Visão Geral'},
       ...Object.keys(DATA.temas).map(n => ({id:'tema_'+n.replace(' ',''), label:n, key:n}))
     ]},
-  { id:'ppgs', label:'PPG\'s', icon:'🎓' },
   { id:'bolsas', label:'Bolsas', icon:'🎒' },
   { id:'missoes', label:'Missões', icon:'✈️' },
   { id:'ri', label:'Relações Internacionais', icon:'🌍' },
   { id:'eventos', label:'Eventos', icon:'👩‍🏫' },
   { id:'comunicacao', label:'Comunicação', icon:'📢' },
   { id:'metas', label:'Metas', icon:'🎯' },
+  { id:'ppgs', label:'PPG\'s', icon:'🎓' },
 ];
 
 const TITLES = { dashboard:['Dashboard','Visão geral da execução orçamentária da rede.'],

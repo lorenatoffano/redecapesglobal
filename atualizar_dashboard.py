@@ -267,11 +267,21 @@ def extrair(xlsx_path):
     # ================= COMUNICAÇÃO =================
     wscm = wb['📢 Comunicação']
     pub_por_tipo = []
-    for r in range(2, 9):
-        tipo = wscm.cell(r,1).value
-        if not tipo: continue
-        pub_por_tipo.append({'tipo': tipo, 'qtd': wscm.cell(r,2).value or 0})
-    result['comunicacao'] = {'publicacoes_por_tipo': pub_por_tipo, 'visualizacoes_total': wscm.cell(2,4).value or 0}
+    header_row_com = None
+    for r in range(1, 15):
+        if str(wscm.cell(r,1).value).strip() == 'Tipo':
+            header_row_com = r
+            break
+    if header_row_com:
+        r = header_row_com + 1
+        while True:
+            tipo = wscm.cell(r,1).value
+            if not tipo or str(tipo).strip().upper() == 'TOTAL':
+                break
+            pub_por_tipo.append({'tipo': tipo, 'qtd': wscm.cell(r,2).value or 0})
+            r += 1
+    visualizacoes_total = wscm.cell(header_row_com, 4).value if header_row_com else 0
+    result['comunicacao'] = {'publicacoes_por_tipo': pub_por_tipo, 'visualizacoes_total': visualizacoes_total or 0}
 
     # ================= RI (Relações Internacionais) =================
     wri = wb['🌍 RI']
