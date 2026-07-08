@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPGs — Rede CAPES Global</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0eeea;
+    --text: #1a1917; --muted: #6b6a66; --border: #e0ddd8;
+    --blue: #1a5c9e; --green: #2d7d5c; --orange: #c95c1a;
+    --purple: #7c3d9e; --red: #b5302b; --teal: #4a7fa0;
+    --radius: 10px;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+  header { background: var(--text); color: #fff; padding: 2.5rem 3rem; }
+  header .eyebrow { font-family: 'Space Grotesk', sans-serif; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: .4rem; }
+  header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: -.02em; }
+  header .subtitle { margin-top: .4rem; color: rgba(255,255,255,.5); font-size: 13px; }
+  main { padding: 2rem 3rem 3rem; max-width: 1160px; margin: 0 auto; }
+  .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 2rem 0 .75rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+  .kpi-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; }
+  .kpi-accent { border-top: 3px solid var(--blue); }
+  .kpi-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .kpi-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .mediana-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .med-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+  .med-title { font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: .75rem; }
+  .med-row { display: grid; grid-template-columns: 1fr 80px 80px; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .med-row:last-child { border-bottom: none; }
+  .med-vals { display: contents; }
+  .med-val { text-align: right; }
+  .med-val span { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; }
+  .med-global { display: flex; gap: 16px; margin-top: .5rem; }
+  .med-global-item { flex: 1; background: var(--surface2); border-radius: 6px; padding: .6rem 1rem; }
+  .med-global-item .val { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; }
+  .med-global-item .lbl { font-size: 11px; color: var(--muted); }
+  .charts-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+  .chart-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; margin-bottom: 1rem; }
+  .chart-wrap { position: relative; width: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .leg-sq { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .tema-grid { display: grid; gap: 10px; }
+  .tema-row { display: flex; align-items: center; gap: 10px; }
+  .tema-name { font-size: 12px; color: var(--muted); width: 55px; flex-shrink: 0; }
+  .tema-bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 18px; overflow: hidden; }
+  .tema-bar-inner { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; }
+  .tema-pct { font-size: 11px; font-weight: 500; color: #fff; }
+  .tema-count { font-size: 11px; color: var(--muted); width: 55px; text-align: right; flex-shrink: 0; }
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: var(--surface2); }
+  th { font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: .7rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: .65rem 1rem; border-bottom: 1px solid var(--border); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .b7 { background:#1a1917; color:#fff; } .b6 { background:#1a5c9e; color:#fff; }
+  .b5 { background:#2d7d5c; color:#fff; } .b4 { background:#e6f0f9; color:#1a5c9e; }
+  .b3 { background:#fdeee5; color:#c95c1a; }
+  .ies-tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 10px; font-weight: 500; background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  footer { text-align: center; padding: 2rem; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 2rem; }
+  @media print { body{background:#fff} header{-webkit-print-color-adjust:exact;print-color-adjust:exact} }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Rede CAPES Global — Relatório analítico</p>
+  <h1>Programas de Pós-Graduação</h1>
+  <p class="subtitle">81 PPGs · 6 instituições · Dados: PPGs_RedeCapesGlobal.xlsx</p>
+</header>
+
+<main>
+
+  <p class="section-label">Visão geral</p>
+  <div class="kpi-grid">
+    <div class="kpi kpi-accent">
+      <p class="kpi-label">Total de PPGs</p>
+      <p class="kpi-value">81</p>
+      <p class="kpi-sub">em 6 IES</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Nota média CAPES</p>
+      <p class="kpi-value">4,8</p>
+      <p class="kpi-sub">escala de 3 a 7</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Total docentes</p>
+      <p class="kpi-value">1.751</p>
+      <p class="kpi-sub">média 21,6 / PPG</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">Total discentes</p>
+      <p class="kpi-value">5.871</p>
+      <p class="kpi-sub">média 72,5 / PPG</p>
+    </div>
+    <div class="kpi">
+      <p class="kpi-label">PPGs nota 6–7</p>
+      <p class="kpi-value">21</p>
+      <p class="kpi-sub">26% do total</p>
+    </div>
+  </div>
+
+  <p class="section-label">Medianas de docentes e discentes</p>
+  <div class="mediana-grid">
+
+    <div class="med-card">
+      <p class="med-title">Geral (81 PPGs)</p>
+      <div class="med-global">
+        <div class="med-global-item">
+          <div class="val">18</div>
+          <div class="lbl">Mediana docentes</div>
+        </div>
+        <div class="med-global-item">
+          <div class="val">59</div>
+          <div class="lbl">Mediana discentes</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:.75rem;">A mediana representa o PPG "típico" da rede, sem distorção de programas muito grandes ou pequenos.</p>
+    </div>
+
+    <div class="med-card">
+      <p class="med-title">Por IES</p>
+      <div class="med-row" style="font-size:10px;color:var(--muted);padding-bottom:4px;">
+        <span>IES</span>
+        <span style="text-align:right">Docentes</span>
+        <span style="text-align:right">Discentes</span>
+      </div>
+      <div class="med-row"><span>FIOCRUZ</span><div class="med-vals"><div class="med-val"><span>22,5</span></div><div class="med-val"><span>69,5</span></div></div></div>
+      <div class="med-row"><span>UFPI</span><div class="med-vals"><div class="med-val"><span>16,5</span></div><div class="med-val"><span>67,5</span></div></div></div>
+      <div class="med-row"><span>UNILA</span><div class="med-vals"><div class="med-val"><span>16,5</span></div><div class="med-val"><span>35,5</span></div></div></div>
+      <div class="med-row"><span>UFMS</span><div class="med-vals"><div class="med-val"><span>15,0</span></div><div class="med-val"><span>59,0</span></div></div></div>
+      <div class="med-row"><span>UNIR</span><div class="med-vals"><div class="med-val"><span>16,0</span></div><div class="med-val"><span>102,0</span></div></div></div>
+      <div class="med-row"><span>UFOPA</span><div class="med-vals"><div class="med-val"><span>13,0</span></div><div class="med-val"><span>42,0</span></div></div></div>
+    </div>
+
+    <div class="med-card">
+      <p class="med-title">Por Tema (PPGs com SIM)</p>
+      <div class="med-row" style="font-size:10px;color:var(--muted);padding-bottom:4px;">
+        <span>Tema</span>
+        <span style="text-align:right">Docentes</span>
+        <span style="text-align:right">Discentes</span>
+      </div>
+      <div class="med-row"><span>Tema 1 <small style="color:var(--muted)">(46)</small></span><div class="med-vals"><div class="med-val"><span>21,0</span></div><div class="med-val"><span>65,5</span></div></div></div>
+      <div class="med-row"><span>Tema 2 <small style="color:var(--muted)">(44)</small></span><div class="med-vals"><div class="med-val"><span>21,0</span></div><div class="med-val"><span>77,0</span></div></div></div>
+      <div class="med-row"><span>Tema 3 <small style="color:var(--muted)">(39)</small></span><div class="med-vals"><div class="med-val"><span>19,0</span></div><div class="med-val"><span>59,0</span></div></div></div>
+      <div class="med-row"><span>Tema 4 <small style="color:var(--muted)">(26)</small></span><div class="med-vals"><div class="med-val"><span>20,5</span></div><div class="med-val"><span>77,0</span></div></div></div>
+      <div class="med-row"><span>Tema 5 <small style="color:var(--muted)">(41)</small></span><div class="med-vals"><div class="med-val"><span>19,0</span></div><div class="med-val"><span>60,0</span></div></div></div>
+    </div>
+  </div>
+
+  <p class="section-label">Distribuição por instituição</p>
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Quantidade de PPGs por IES</h3>
+      <div class="legend">
+        <span class="leg"><span class="leg-sq" style="background:#1a5c9e"></span>FIOCRUZ</span>
+        <span class="leg"><span class="leg-sq" style="background:#2d7d5c"></span>UFPI</span>
+        <span class="leg"><span class="leg-sq" style="background:#c95c1a"></span>UNILA</span>
+        <span class="leg"><span class="leg-sq" style="background:#7c3d9e"></span>UFMS</span>
+        <span class="leg"><span class="leg-sq" style="background:#b5302b"></span>UFOPA</span>
+        <span class="leg"><span class="leg-sq" style="background:#4a7fa0"></span>UNIR</span>
+      </div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c1"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Nota média por IES</h3>
+      <div class="legend"><span class="leg"><span class="leg-sq" style="background:#2d7d5c"></span>Média CAPES (máx. 7)</span></div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c2"></canvas></div>
+    </div>
+  </div>
+
+  <p class="section-label">Notas e corpo acadêmico</p>
+  <div class="charts-2col">
+    <div class="chart-card">
+      <h3>Distribuição de notas CAPES</h3>
+      <div class="legend">
+        <span class="leg"><span class="leg-sq" style="background:#1a1917"></span>Nota 7</span>
+        <span class="leg"><span class="leg-sq" style="background:#1a5c9e"></span>Nota 6</span>
+        <span class="leg"><span class="leg-sq" style="background:#2d7d5c"></span>Nota 5</span>
+        <span class="leg"><span class="leg-sq" style="background:#4a7fa0"></span>Nota 4</span>
+        <span class="leg"><span class="leg-sq" style="background:#c95c1a"></span>Nota 3</span>
+      </div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c3"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Docentes e discentes por IES</h3>
+      <div class="legend">
+        <span class="leg"><span class="leg-sq" style="background:#1a5c9e"></span>Docentes</span>
+        <span class="leg"><span class="leg-sq" style="background:#c95c1a"></span>Discentes</span>
+      </div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c4"></canvas></div>
+    </div>
+  </div>
+
+  <p class="section-label">Cobertura temática</p>
+  <div class="chart-card" style="margin-bottom:0">
+    <h3>PPGs por tema (SIM = cobre o tema)</h3>
+    <div style="margin-top:1rem" class="tema-grid">
+      <div class="tema-row"><span class="tema-name">Tema 1</span><div class="tema-bar-wrap"><div class="tema-bar-inner" style="width:56.8%;background:#1a5c9e"><span class="tema-pct">57%</span></div></div><span class="tema-count">46 / 81</span></div>
+      <div class="tema-row"><span class="tema-name">Tema 2</span><div class="tema-bar-wrap"><div class="tema-bar-inner" style="width:54.3%;background:#2d7d5c"><span class="tema-pct">54%</span></div></div><span class="tema-count">44 / 81</span></div>
+      <div class="tema-row"><span class="tema-name">Tema 5</span><div class="tema-bar-wrap"><div class="tema-bar-inner" style="width:50.6%;background:#7c3d9e"><span class="tema-pct">51%</span></div></div><span class="tema-count">41 / 81</span></div>
+      <div class="tema-row"><span class="tema-name">Tema 3</span><div class="tema-bar-wrap"><div class="tema-bar-inner" style="width:48.1%;background:#c95c1a"><span class="tema-pct">48%</span></div></div><span class="tema-count">39 / 81</span></div>
+      <div class="tema-row"><span class="tema-name">Tema 4</span><div class="tema-bar-wrap"><div class="tema-bar-inner" style="width:32.1%;background:#b5302b"><span class="tema-pct">32%</span></div></div><span class="tema-count">26 / 81</span></div>
+    </div>
+  </div>
+
+  <p class="section-label">Destaques — PPGs com maior nota</p>
+  <div class="table-card">
+    <table>
+      <thead><tr><th>PPG</th><th>IES</th><th>Nota</th><th style="text-align:right">Docentes</th><th style="text-align:right">Discentes</th></tr></thead>
+      <tbody>
+        <tr><td>Ciência e Engenharia dos Materiais</td><td><span class="ies-tag">UFPI</span></td><td><span class="badge b7">7</span></td><td style="text-align:right">19</td><td style="text-align:right">142</td></tr>
+        <tr><td>Epidemiologia em Saúde Pública (Acadêmico)</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b7">7</span></td><td style="text-align:right">34</td><td style="text-align:right">145</td></tr>
+        <tr><td>Informação e Comunicação em Saúde</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b7">7</span></td><td style="text-align:right">26</td><td style="text-align:right">114</td></tr>
+        <tr><td>Biologia Celular e Molecular</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b7">7</span></td><td style="text-align:right">79</td><td style="text-align:right">171</td></tr>
+        <tr><td>Biologia Parasitária</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b7">7</span></td><td style="text-align:right">48</td><td style="text-align:right">129</td></tr>
+        <tr><td>Doenças Infecciosas e Parasitárias</td><td><span class="ies-tag">UFMS</span></td><td><span class="badge b6">6</span></td><td style="text-align:right">17</td><td style="text-align:right">91</td></tr>
+        <tr><td>Saúde e Desenvolvimento na Região Centro-Oeste</td><td><span class="ies-tag">UFMS</span></td><td><span class="badge b6">6</span></td><td style="text-align:right">20</td><td style="text-align:right">162</td></tr>
+        <tr><td>História das Ciências e da Saúde</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b6">6</span></td><td style="text-align:right">21</td><td style="text-align:right">97</td></tr>
+        <tr><td>Saúde Pública (Acadêmico)</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b6">6</span></td><td style="text-align:right">53</td><td style="text-align:right">270</td></tr>
+        <tr><td>Biociências e Biotecnologia em Saúde</td><td><span class="ies-tag">FIOCRUZ</span></td><td><span class="badge b6">6</span></td><td style="text-align:right">30</td><td style="text-align:right">101</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>Rede CAPES Global — Gerado automaticamente — Dados: PPGs_RedeCapesGlobal.xlsx</footer>
+
+<script>
+const grid = 'rgba(0,0,0,0.06)';
+const base = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} };
+
+new Chart(document.getElementById('c1'),{type:'bar',data:{labels:['FIOCRUZ','UFPI','UNILA','UFMS','UFOPA','UNIR'],datasets:[{data:[46,12,8,7,5,3],backgroundColor:['#1a5c9e','#2d7d5c','#c95c1a','#7c3d9e','#b5302b','#4a7fa0'],borderRadius:5}]},options:{...base,scales:{x:{ticks:{autoSkip:false,font:{size:11}},grid:{display:false}},y:{grid:{color:grid},ticks:{font:{size:11}}}}}});
+
+new Chart(document.getElementById('c2'),{type:'bar',data:{labels:['FIOCRUZ','UFMS','UFPI','UNIR','UNILA','UFOPA'],datasets:[{data:[5.17,4.57,4.42,4.00,3.75,3.60],backgroundColor:'#2d7d5c',borderRadius:5}]},options:{...base,scales:{x:{ticks:{autoSkip:false,font:{size:11}},grid:{display:false}},y:{min:0,max:7,grid:{color:grid},ticks:{font:{size:11},stepSize:1}}}}});
+
+new Chart(document.getElementById('c3'),{type:'bar',data:{labels:['Nota 3','Nota 4','Nota 5','Nota 6','Nota 7'],datasets:[{data:[6,33,21,16,5],backgroundColor:['#c95c1a','#4a7fa0','#2d7d5c','#1a5c9e','#1a1917'],borderRadius:5}]},options:{...base,scales:{x:{ticks:{autoSkip:false,font:{size:11}},grid:{display:false}},y:{grid:{color:grid},ticks:{font:{size:11}}}}}});
+
+new Chart(document.getElementById('c4'),{type:'bar',data:{labels:['FIOCRUZ','UFPI','UNILA','UFMS','UFOPA','UNIR'],datasets:[{label:'Docentes',data:[1176,215,130,111,66,53],backgroundColor:'#1a5c9e',borderRadius:3},{label:'Discentes',data:[3605,1007,331,521,173,234],backgroundColor:'#c95c1a',borderRadius:3}]},options:{...base,scales:{x:{ticks:{autoSkip:false,font:{size:11}},grid:{display:false}},y:{grid:{color:grid},ticks:{font:{size:11}}}}}});
+</script>
+</body>
+</html>
