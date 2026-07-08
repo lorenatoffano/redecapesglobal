@@ -76,7 +76,7 @@ function heatmapBlock(paisesObj, opts) {
   return `
     <div class="grid-2">
       <div class="panel">
-        <h3>${opts.title || 'Mapa de calor — países envolvidos'}</h3>
+        <h3>${opts.title || 'Mapa de calor - países envolvidos'}</h3>
         <div id="mapBox" style="position:relative;height:300px;">
           <svg id="worldMap" viewBox="0 0 960 500" style="width:100%;height:100%;"></svg>
           <div id="mapTooltip" style="position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:11.5px;padding:6px 10px;border-radius:6px;opacity:0;transition:opacity .1s;white-space:nowrap;"></div>
@@ -166,12 +166,12 @@ const NAV = [
 const TITLES = { dashboard:['Dashboard','Visão geral da execução orçamentária da rede.'],
   cg:['Comitê Gestor','Orçamento por ano e instituição, consolidado do Comitê Gestor.'],
   bolsas:['Bolsas','Bolsas por modalidade, instituição, tema e produção científica associada.'],
-  missoes:['Missões','Missões programadas e realizadas — Comitê Gestor e Temas.'],
+  missoes:['Missões','Missões programadas e realizadas - Comitê Gestor e Temas.'],
   ri:['Relações Internacionais','Parcerias, acordos e interações internacionais da rede.'],
   eventos:['Eventos','Controle de eventos institucionais da rede.'],
   comunicacao:['Comunicação','Publicações e alcance da comunicação institucional.'],
   metas:['Metas','Painel de metas da rede.'],
-  tema_overview:['Temas — Visão Geral','Distribuição orçamentária por tema, missões e bolsas.'],
+  tema_overview:['Temas - Visão Geral','Distribuição orçamentária por tema, missões e bolsas.'],
 };
 
 // ============================================================
@@ -233,9 +233,9 @@ function render() {
 
   if (route === 'dashboard') { setTitle(...TITLES.dashboard); root.innerHTML = pageDashboard(); afterDashboard(); }
   else if (route === 'cg') { setTitle(...TITLES.cg); root.innerHTML = pageCG(); afterCG(); }
-  else if (route.startsWith('inst_')) { const nome = route.slice(5); setTitle('Instituições — '+nome,'Orçamento e execução por ano — '+nome+'.'); root.innerHTML = pageInstituicao(nome); afterInstituicao(nome); }
+  else if (route.startsWith('inst_')) { const nome = route.slice(5); setTitle('Instituições — '+nome,'Orçamento e execução por ano - '+nome+'.'); root.innerHTML = pageInstituicao(nome); afterInstituicao(nome); }
   else if (route === 'tema_overview') { setTitle(...TITLES.tema_overview); root.innerHTML = pageTemasOverview(); afterTemasOverview(); }
-  else if (route.startsWith('tema_')) { const key = findTemaKey(route); setTitle('Temas — '+key,'Orçamento e execução — '+key+'.'); root.innerHTML = pageTema(key); afterTema(key); }
+  else if (route.startsWith('tema_')) { const key = findTemaKey(route); setTitle('Temas — '+key,'Orçamento e execução - '+key+'.'); root.innerHTML = pageTema(key); afterTema(key); }
   else if (route === 'bolsas') { setTitle(...TITLES.bolsas); root.innerHTML = pageBolsas(); afterBolsas(); }
   else if (route === 'missoes') { setTitle(...TITLES.missoes); root.innerHTML = pageMissoes(); afterMissoes(); }
   else if (route === 'ri') { setTitle(...TITLES.ri); root.innerHTML = pageRI(); afterRI(); }
