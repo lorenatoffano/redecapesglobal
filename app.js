@@ -257,7 +257,7 @@ function pageDashboard() {
   const r = DATA.resumo;
   return `
     <div class="kpi-row">
-      ${kpiCard('Total Rede — Aprovado', fmtBRL(r.total_rede.aprovado), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Executado ${fmtBRL(r.total_rede.executado)}</div>`)}
+      ${kpiCard('Total Rede - Aprovado', fmtBRL(r.total_rede.aprovado), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Executado ${fmtBRL(r.total_rede.executado)}</div>`)}
       ${kpiCard('Bolsas CG', fmtBRL(r.bolsas_cg.previsto), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Executado ${fmtBRL(r.bolsas_cg.executado)}</div>`)}
       ${kpiCard('Missões CG', fmtBRL(r.missoes_cg.aprovado), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Executado ${fmtBRL(r.missoes_cg.executado)}</div>`)}
       ${kpiCard('Ações Institucionais', fmtBRL(r.acoes_inst.aprovado), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">Executado ${fmtBRL(r.acoes_inst.executado)}</div>`)}
@@ -446,7 +446,7 @@ function pageBolsas() {
     <div class="section-title">Produção científica <span class="tag">${fmtNum(b.total_publicacoes)} artigos</span></div>
     <div class="panel"><div class="chart-box sm"><canvas id="chPublicacoes"></canvas></div></div>
     <div class="section-title">Presença internacional das bolsas</div>
-    ${heatmapBlock(DATA.paises.bolsas, {title:'Mapa de calor — país de destino', showIesDestino:true})}
+    ${heatmapBlock(DATA.paises.bolsas, {title:'Mapa de calor - país de destino', showIesDestino:true})}
   `;
 }
 function afterBolsas() {
@@ -487,7 +487,7 @@ function pageMissoes() {
     <div class="section-title">Lista de missões <span class="tag">${fmtNum(m.registros.length)} registros</span></div>
     <div class="panel" style="max-height:420px;overflow-y:auto;"><table id="tblMissoes"></table></div>
     <div class="section-title">Presença internacional das missões</div>
-    ${heatmapBlock(DATA.paises.missoes, {title:'Mapa de calor — destino das missões'})}
+    ${heatmapBlock(DATA.paises.missoes, {title:'Mapa de calor - destino das missões'})}
   `;
 }
 function afterMissoes() {
@@ -534,7 +534,7 @@ function pageRI() {
     <div class="section-title">Por continente</div>
     <div class="panel"><div class="chart-box sm"><canvas id="chContinente"></canvas></div></div>
     <div class="section-title">Mapa de parcerias e interações internacionais</div>
-    ${heatmapBlock(DATA.paises.ri, {title:'Mapa de calor — parcerias e interações'})}
+    ${heatmapBlock(DATA.paises.ri, {title:'Mapa de calor - parcerias e interações'})}
     <div class="section-title">Registro de parcerias e interações <span class="tag">${fmtNum(DATA.ri.registros.length)} registros</span></div>
     ${DATA.ri.registros.length ? `<div class="panel" style="max-height:420px;overflow-y:auto;"><table id="tblRI"></table></div>` :
       `<div class="panel"><div class="empty-state">Ainda não há parcerias/interações cadastradas na aba RI da planilha.</div></div>`}
@@ -586,7 +586,7 @@ function pageEventos() {
         <td>${reg.abrangencia||'—'}</td><td>${reg.pais||'—'}</td><td>${reg.responsavel||'—'}</td><td>${reg.situacao||'—'}</td></tr>`).join('')}
     </table></div>` : `<div class="panel"><div class="empty-state">Ainda não há eventos cadastrados na planilha.</div></div>`}
     <div class="section-title">Presença internacional dos eventos</div>
-    ${heatmapBlock(DATA.paises.eventos, {title:'Mapa de calor — país dos eventos'})}
+    ${heatmapBlock(DATA.paises.eventos, {title:'Mapa de calor - país dos eventos'})}
   `;
 }
 function afterEventos() { afterHeatmap(DATA.paises.eventos, {}); }
@@ -620,7 +620,7 @@ function afterComunicacao() {
 }
 
 // ============================================================
-// PAGE: Metas (placeholder — aba ainda em elaboração na planilha)
+// PAGE: Metas (placeholder - aba ainda em elaboração na planilha)
 // ============================================================
 function pageMetas() {
   return `
@@ -629,7 +629,7 @@ function pageMetas() {
         <div style="font-size:32px;margin-bottom:12px;">🎯</div>
         <div style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px;">Aba em elaboração</div>
         A aba de Metas ainda está sendo estruturada na planilha. Assim que os indicadores forem definidos,
-        esta página passa a exibir o acompanhamento automaticamente — não é necessário nenhum ajuste aqui no painel.
+        esta página passa a exibir o acompanhamento automaticamente.
       </div>
     </div>
   `;
