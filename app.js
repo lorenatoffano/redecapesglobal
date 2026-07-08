@@ -231,7 +231,7 @@ window.addEventListener('hashchange', render);
 window.addEventListener('DOMContentLoaded', () => { buildNav(); render(); });
 
 function render() {
-  const route = (location.hash || '#dashboard').slice(1);
+  const route = (location.hash || '#quemsomos').slice(1);
   setActiveNav(route);
   const root = document.getElementById('contentRoot');
 
@@ -248,7 +248,7 @@ function render() {
   else if (route === 'eventos') { setTitle(...TITLES.eventos); root.innerHTML = pageEventos(); afterEventos(); }
   else if (route === 'comunicacao') { setTitle(...TITLES.comunicacao); root.innerHTML = pageComunicacao(); afterComunicacao(); }
   else if (route === 'metas') { setTitle(...TITLES.metas); root.innerHTML = pageMetas(); }
-  else { setTitle(...TITLES.dashboard); root.innerHTML = pageDashboard(); afterDashboard(); }
+  else { setTitle(...TITLES.quemsomos); root.innerHTML = pageQuemSomos(); }
 }
 function setTitle(t, s) { document.getElementById('pageTitle').textContent = t; document.getElementById('pageSubtitle').textContent = s || ''; }
 function findTemaKey(route) {
