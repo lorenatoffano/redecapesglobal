@@ -360,15 +360,111 @@ def extrair(xlsx_path):
     return result
 
 
+def extrair_ppgs(xlsx_path):
+    import statistics
+    from collections import defaultdict
+    wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+    ws = wb[wb.sheetnames[0]]
+
+    TEMAS = ['TEMA 1','TEMA 2','TEMA 3','TEMA 4','TEMA 5']
+    registros = []
+    for r in range(3, ws.max_row + 1):
+        ies = ws.cell(r,1).value
+        ppg = ws.cell(r,3).value
+        if not ies or not ppg or str(ies).strip().upper() == 'TOTAL': continue
+        nota = ws.cell(r,4).value or 0
+        doc = ws.cell(r,5).value or 0
+        disc = ws.cell(r,6).value or 0
+        temas_sim = []
+        for i, t in enumerate(TEMAS):
+            val = ws.cell(r,7+i).value
+            if val and str(val).strip().upper() == 'SIM':
+                temas_sim.append(f'Tema {i+1}')
+        registros.append({'ies': str(ies).strip(), 'ppg': str(ppg).strip(), 'nota': nota,
+                           'docentes': doc, 'discentes': disc, 'temas': temas_sim})
+
+    total = len(registros)
+    if total == 0:
+        return None
+    nota_media = sum(r['nota'] for r in registros) / total
+    total_docentes = sum(r['docentes'] for r in registros)
+    total_discentes = sum(r['discentes'] for r in registros)
+    altas = [r for r in registros if r['nota'] >= 6]
+
+    kpis = {'total': total, 'total_ies': len(set(r['ies'] for r in registros)),
+            'nota_media': round(nota_media, 2), 'total_docentes': total_docentes,
+            'docentes_media': round(total_docentes/total, 1), 'total_discentes': total_discentes,
+            'discentes_media': round(total_discentes/total, 1), 'ppgs_alta_nota': len(altas),
+            'ppgs_alta_nota_pct': round(len(altas)/total*100, 0)}
+
+    mediana_geral = {'docentes': statistics.median(r['docentes'] for r in registros),
+                      'discentes': statistics.median(r['discentes'] for r in registros)}
+
+    por_ies_map = defaultdict(list)
+    for r in registros: por_ies_map[r['ies']].append(r)
+    por_ies = []
+    for ies, regs in sorted(por_ies_map.items(), key=lambda x: -len(x[1])):
+        por_ies.append({'ies': ies, 'qtd': len(regs), 'nota_media': round(sum(x['nota'] for x in regs)/len(regs), 2),
+            'docentes': sum(x['docentes'] for x in regs), 'discentes': sum(x['discentes'] for x in regs),
+            'mediana_docentes': statistics.median(x['docentes'] for x in regs),
+            'mediana_discentes': statistics.median(x['discentes'] for x in regs)})
+
+    mediana_por_tema = []
+    for i in range(1,6):
+        tema = f'Tema {i}'
+        regs = [r for r in registros if tema in r['temas']]
+        if regs:
+            mediana_por_tema.append({'tema': tema, 'qtd': len(regs),
+                'docentes': statistics.median(x['docentes'] for x in regs),
+                'discentes': statistics.median(x['discentes'] for x in regs)})
+
+    dist_notas = defaultdict(int)
+    for r in registros: dist_notas[r['nota']] += 1
+    distribuicao_notas = [{'nota': n, 'qtd': dist_notas[n]} for n in sorted(dist_notas.keys())]
+
+    cobertura_tematica = []
+    for i in range(1,6):
+        tema = f'Tema {i}'
+        qtd = sum(1 for r in registros if tema in r['temas'])
+        cobertura_tematica.append({'tema': tema, 'qtd': qtd, 'pct': round(qtd/total*100,1)})
+    cobertura_tematica.sort(key=lambda x: -x['qtd'])
+
+    lista = sorted(
+        [{'ppg': r['ppg'], 'ies': r['ies'], 'nota': r['nota'], 'docentes': r['docentes'], 'discentes': r['discentes']} for r in registros],
+        key=lambda x: (-x['nota'], x['ies'], x['ppg']))
+
+    return {'kpis': kpis, 'mediana_geral': mediana_geral, 'por_ies': por_ies,
+            'mediana_por_tema': mediana_por_tema, 'distribuicao_notas': distribuicao_notas,
+            'cobertura_tematica': cobertura_tematica, 'lista': lista}
+
+
 def main():
     if len(sys.argv) < 2:
-        print("Uso: python3 atualizar_dashboard.py <planilha.xlsx>")
+        print("Uso: python3 atualizar_dashboard.py <planilha_controle.xlsx> [planilha_ppgs.xlsx]")
         sys.exit(1)
     xlsx_path = sys.argv[1]
     data = extrair(xlsx_path)
 
     idx_path = pathlib.Path(__file__).parent / 'index.html'
     html = idx_path.read_text(encoding='utf-8')
+
+    # Preserva os dados de PPGs já existentes no painel, a menos que uma planilha de PPGs seja informada
+    m = re.search(r"const DATA = (.*?);\n", html, flags=re.S)
+    ppgs_atual = None
+    if m:
+        try:
+            ppgs_atual = json.loads(m.group(1)).get('ppgs')
+        except Exception:
+            ppgs_atual = None
+
+    if len(sys.argv) >= 3:
+        ppgs_novo = extrair_ppgs(sys.argv[2])
+        if ppgs_novo:
+            data['ppgs'] = ppgs_novo
+            print("Dados de PPGs atualizados a partir de", sys.argv[2])
+    elif ppgs_atual:
+        data['ppgs'] = ppgs_atual
+
     html = re.sub(r"const DATA = .*?;\n", "const DATA = " + json.dumps(data, ensure_ascii=False) + ";\n", html, count=1, flags=re.S)
     idx_path.write_text(html, encoding='utf-8')
     print("Painel atualizado:", idx_path)

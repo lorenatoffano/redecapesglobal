@@ -155,6 +155,7 @@ const NAV = [
       {id:'tema_overview', label:'Visão Geral'},
       ...Object.keys(DATA.temas).map(n => ({id:'tema_'+n.replace(' ',''), label:n, key:n}))
     ]},
+  { id:'ppgs', label:'PPG\'s', icon:'🎓' },
   { id:'bolsas', label:'Bolsas', icon:'🎒' },
   { id:'missoes', label:'Missões', icon:'✈️' },
   { id:'ri', label:'Relações Internacionais', icon:'🌍' },
@@ -172,6 +173,7 @@ const TITLES = { dashboard:['Dashboard','Visão geral da execução orçamentár
   comunicacao:['Comunicação','Publicações e alcance da comunicação institucional.'],
   metas:['Metas','Painel de metas da rede.'],
   tema_overview:['Temas - Visão Geral','Distribuição orçamentária por tema, missões e bolsas.'],
+  ppgs:['PPG\'s','Programas de Pós-Graduação da rede — notas CAPES, corpo docente e discente.'],
 };
 
 // ============================================================
@@ -236,6 +238,7 @@ function render() {
   else if (route.startsWith('inst_')) { const nome = route.slice(5); setTitle('Instituições - '+nome,'Orçamento e execução por ano - '+nome+'.'); root.innerHTML = pageInstituicao(nome); afterInstituicao(nome); }
   else if (route === 'tema_overview') { setTitle(...TITLES.tema_overview); root.innerHTML = pageTemasOverview(); afterTemasOverview(); }
   else if (route.startsWith('tema_')) { const key = findTemaKey(route); setTitle('Temas - '+key,'Orçamento e execução - '+key+'.'); root.innerHTML = pageTema(key); afterTema(key); }
+  else if (route === 'ppgs') { setTitle(...TITLES.ppgs); root.innerHTML = pagePPGs(); afterPPGs(); }
   else if (route === 'bolsas') { setTitle(...TITLES.bolsas); root.innerHTML = pageBolsas(); afterBolsas(); }
   else if (route === 'missoes') { setTitle(...TITLES.missoes); root.innerHTML = pageMissoes(); afterMissoes(); }
   else if (route === 'ri') { setTitle(...TITLES.ri); root.innerHTML = pageRI(); afterRI(); }
@@ -419,6 +422,105 @@ function afterTema(nome) {
     <tr><th>IES</th><th>Previsto</th><th>Executado</th></tr>
     ${t.missoes_por_ies.map(i => `<tr><td>${i.ies}</td><td class="num">${fmtBRL(i.total_previsto)}</td><td class="num">${fmtBRL(i.total_executado)}</td></tr>`).join('')}`;
 }
+
+// ============================================================
+// PAGE: PPG's
+// ============================================================
+function pagePPGs() {
+  const p = DATA.ppgs;
+  const k = p.kpis;
+  const notaBadgeClass = (n) => n >= 6 ? 'status-con' : (n >= 5 ? 'status-and' : 'status-nao');
+  return `
+    <div class="kpi-row">
+      ${kpiCard('Total de PPGs', fmtNum(k.total), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">em ${fmtNum(k.total_ies)} IES</div>`)}
+      ${kpiCard('Nota média CAPES', k.nota_media.toLocaleString('pt-BR',{minimumFractionDigits:1}), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">escala de 3 a 7</div>`)}
+      ${kpiCard('Total docentes', fmtNum(k.total_docentes), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">média ${k.docentes_media.toLocaleString('pt-BR')} / PPG</div>`)}
+      ${kpiCard('Total discentes', fmtNum(k.total_discentes), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">média ${k.discentes_media.toLocaleString('pt-BR')} / PPG</div>`)}
+      ${kpiCard('PPGs nota 6-7', fmtNum(k.ppgs_alta_nota), `<div style="font-size:11.5px;color:var(--muted);margin-top:6px;">${k.ppgs_alta_nota_pct.toLocaleString('pt-BR')}% do total</div>`)}
+    </div>
+
+    <div class="section-title">Medianas de docentes e discentes</div>
+    <div class="grid-3">
+      <div class="panel">
+        <h3>Geral (${fmtNum(p.kpis.total)} PPGs)</h3>
+        <div style="display:flex;gap:14px;">
+          <div style="flex:1;background:var(--blue-light);border-radius:8px;padding:12px 14px;">
+            <div style="font-family:'Space Grotesk';font-size:19px;font-weight:700;color:var(--navy);">${p.mediana_geral.docentes.toLocaleString('pt-BR')}</div>
+            <div style="font-size:10.5px;color:var(--muted);">Mediana docentes</div>
+          </div>
+          <div style="flex:1;background:var(--blue-light);border-radius:8px;padding:12px 14px;">
+            <div style="font-family:'Space Grotesk';font-size:19px;font-weight:700;color:var(--navy);">${p.mediana_geral.discentes.toLocaleString('pt-BR')}</div>
+            <div style="font-size:10.5px;color:var(--muted);">Mediana discentes</div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:12px;">A mediana representa o PPG "típico" da rede, sem distorção de programas muito grandes ou pequenos.</p>
+      </div>
+      <div class="panel"><h3>Por IES</h3><table>
+        <tr><th>IES</th><th>Docentes</th><th>Discentes</th></tr>
+        ${p.por_ies.map(i => `<tr><td>${i.ies}</td><td class="num">${i.mediana_docentes.toLocaleString('pt-BR')}</td><td class="num">${i.mediana_discentes.toLocaleString('pt-BR')}</td></tr>`).join('')}
+      </table></div>
+      <div class="panel"><h3>Por tema (PPGs com SIM)</h3><table>
+        <tr><th>Tema</th><th>Docentes</th><th>Discentes</th></tr>
+        ${p.mediana_por_tema.map(t => `<tr><td>${t.tema} <span style="color:var(--muted);">(${t.qtd})</span></td><td class="num">${t.docentes.toLocaleString('pt-BR')}</td><td class="num">${t.discentes.toLocaleString('pt-BR')}</td></tr>`).join('')}
+      </table></div>
+    </div>
+
+    <div class="section-title">Distribuição por instituição</div>
+    <div class="grid-2">
+      <div class="panel"><h3>Quantidade de PPGs por IES</h3><div class="chart-box"><canvas id="chPPGqtdIES"></canvas></div></div>
+      <div class="panel"><h3>Nota média por IES</h3><div class="chart-box"><canvas id="chPPGnotaIES"></canvas></div></div>
+    </div>
+
+    <div class="section-title">Notas e corpo acadêmico</div>
+    <div class="grid-2">
+      <div class="panel"><h3>Distribuição de notas CAPES</h3><div class="chart-box"><canvas id="chPPGnotas"></canvas></div></div>
+      <div class="panel"><h3>Docentes e discentes por IES</h3><div class="chart-box"><canvas id="chPPGdocdisc"></canvas></div></div>
+    </div>
+
+    <div class="section-title">Cobertura temática <span class="tag">SIM = PPG cobre o tema</span></div>
+    <div class="panel">
+      ${p.cobertura_tematica.map(t => `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <span style="font-size:12px;color:var(--muted);width:60px;flex-shrink:0;">${t.tema}</span>
+          <div style="flex:1;background:var(--bg);border-radius:4px;height:18px;overflow:hidden;">
+            <div style="height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;width:${t.pct}%;background:#2563a8;">
+              <span style="font-size:11px;font-weight:500;color:#fff;">${t.pct}%</span>
+            </div>
+          </div>
+          <span style="font-size:11px;color:var(--muted);width:55px;text-align:right;flex-shrink:0;">${t.qtd} / ${p.kpis.total}</span>
+        </div>`).join('')}
+    </div>
+
+    <div class="section-title">Lista de PPGs da Rede <span class="tag">${fmtNum(p.lista.length)} programas</span></div>
+    <div class="panel" style="max-height:460px;overflow-y:auto;">
+      <table>
+        <tr><th>PPG</th><th>IES</th><th>Nota</th><th class="num">Docentes</th><th class="num">Discentes</th></tr>
+        ${p.lista.map(x => `<tr><td>${x.ppg}</td><td>${x.ies}</td>
+          <td><span class="pct-pill ${notaBadgeClass(x.nota)}">${x.nota}</span></td>
+          <td class="num">${fmtNum(x.docentes)}</td><td class="num">${fmtNum(x.discentes)}</td></tr>`).join('')}
+      </table>
+    </div>
+  `;
+}
+function afterPPGs() {
+  const p = DATA.ppgs;
+  const palette = ['#2563a8','#2f8f6e','#c98a2a','#7c3d9e','#b5302b','#4a7fa0'];
+  safeChart('chPPGqtdIES', { type:'bar', data:{ labels:p.por_ies.map(i=>i.ies),
+    datasets:[{data:p.por_ies.map(i=>i.qtd), backgroundColor:palette, borderRadius:5}]},
+    options:{...countBarOpts(), plugins:{legend:{display:false}}} });
+  safeChart('chPPGnotaIES', { type:'bar', data:{ labels:p.por_ies.map(i=>i.ies),
+    datasets:[{data:p.por_ies.map(i=>i.nota_media), backgroundColor:'#2f8f6e', borderRadius:5}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{min:0,max:7,ticks:{font:{size:10.5},stepSize:1},grid:{color:'#eef1f5'}},x:{ticks:{font:{size:11}},grid:{display:false}}}} });
+  safeChart('chPPGnotas', { type:'bar', data:{ labels:p.distribuicao_notas.map(n=>'Nota '+n.nota),
+    datasets:[{data:p.distribuicao_notas.map(n=>n.qtd), backgroundColor:['#c98a2a','#4a7fa0','#2f8f6e','#2563a8','#0f2a4a'], borderRadius:5}]},
+    options:{...countBarOpts(), plugins:{legend:{display:false}}} });
+  safeChart('chPPGdocdisc', { type:'bar', data:{ labels:p.por_ies.map(i=>i.ies),
+    datasets:[{label:'Docentes', data:p.por_ies.map(i=>i.docentes), backgroundColor:'#2563a8', borderRadius:4},
+               {label:'Discentes', data:p.por_ies.map(i=>i.discentes), backgroundColor:'#c98a2a', borderRadius:4}]},
+    options: countBarOpts() });
+}
+
 
 // ============================================================
 // PAGE: Bolsas (reestruturada)
