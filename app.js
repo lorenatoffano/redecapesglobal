@@ -315,66 +315,10 @@ function pageQuemSomos() {
     </div>
 
     <div class="section-title">Estrutura da rede</div>
-    <div class="panel">
-
-      <div style="display:flex;justify-content:center;margin-bottom:14px;">
-        <div class="qs-card qs-blue" style="max-width:340px;text-align:center;">
-          <b>COMITÊ GESTOR</b><br><span style="font-size:11px;color:var(--muted);">(Governança Estratégica)</span>
-          <div style="display:flex;gap:8px;margin-top:10px;justify-content:center;">
-            <span class="qs-pill qs-blue-pill">6 Pró-Reitores</span>
-            <span class="qs-pill qs-blue-pill">6 Chefes de RI</span>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:16px;align-items:start;margin-bottom:18px;">
-        <div class="qs-card qs-green">
-          <b>INSTITUIÇÕES DA REDE</b>
-          <ul class="qs-list">
-            <li><b>FIOCRUZ</b> — Bolsas, Missões do CG, Ações Institucionais, Gestão Financeira dos Temas</li>
-            <li><b>UFMS</b> — Bolsas, Ações Institucionais</li>
-            <li><b>UNIR</b> — Bolsas, Ações Institucionais</li>
-            <li><b>UFPI</b> — Bolsas, Ações Institucionais</li>
-            <li><b>UFOPA</b> — Bolsas, Ações Institucionais</li>
-            <li><b>UNILA</b> — Bolsas, Ações Institucionais</li>
-          </ul>
-        </div>
-
-        <div class="qs-card qs-hub" style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <img src="logo-capes-global.png" alt="Rede CAPES Global" style="max-width:150px;margin-bottom:8px;">
-          <span style="font-size:11px;color:var(--bar-text-muted);">Núcleo articulador da rede</span>
-        </div>
-
-        <div class="qs-card qs-blue">
-          <b>COMITÊ ADMINISTRATIVO</b><br><span style="font-size:11px;color:var(--muted);">(Operação e Integração)</span>
-          <ul class="qs-list">
-            <li>Administração</li>
-            <li>Comunicação</li>
-            <li>Relações Internacionais</li>
-            <li>Editais</li>
-            <li>Idiomas</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="qs-card qs-orange" style="margin-bottom:10px;text-align:center;"><b>TEMAS ESTRATÉGICOS</b></div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;">
-        <div class="qs-card qs-orange"><b>TEMA 1</b><div class="qs-tiny">Bolsas · Missões</div><hr class="qs-hr"><div class="qs-tiny"><b>CT1</b> · 6 membros</div><div class="qs-tiny">Fiocruz, UFOPA, UFPI</div></div>
-        <div class="qs-card qs-orange"><b>TEMA 2</b><div class="qs-tiny">Bolsas · Missões</div><hr class="qs-hr"><div class="qs-tiny"><b>CT2</b> · 5 membros</div><div class="qs-tiny">UFPI, Fiocruz, UNIR</div></div>
-        <div class="qs-card qs-orange"><b>TEMA 3</b><div class="qs-tiny">Bolsas · Missões</div><hr class="qs-hr"><div class="qs-tiny"><b>CT3</b> · 6 membros</div><div class="qs-tiny">UNIR, Fiocruz, UFOPA</div></div>
-        <div class="qs-card qs-orange"><b>TEMA 4</b><div class="qs-tiny">Bolsas · Missões</div><hr class="qs-hr"><div class="qs-tiny"><b>CT4</b> · 4 membros</div><div class="qs-tiny">UNILA, Fiocruz, UFMS</div></div>
-        <div class="qs-card qs-orange"><b>TEMA 5</b><div class="qs-tiny">Bolsas · Missões</div><hr class="qs-hr"><div class="qs-tiny"><b>CT5</b> · 6 membros</div><div class="qs-tiny">Fiocruz, UNILA, UFMS</div></div>
-      </div>
-
-      <div class="qs-card qs-purple" style="margin-bottom:10px;text-align:center;"><b>RECURSOS</b></div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
-        <div class="qs-card qs-purple"><b>Financeiros</b><div class="qs-tiny">Bolsas, Missões, Editais, apoio a eventos e ações</div></div>
-        <div class="qs-card qs-purple"><b>Humanos</b><div class="qs-tiny">Membros dos comitês, especialistas e colaboradores</div></div>
-        <div class="qs-card qs-purple"><b>Conhecimento</b><div class="qs-tiny">Dados, pesquisas, boas práticas, capacitações e intercâmbios</div></div>
-        <div class="qs-card qs-purple"><b>Tecnológicos</b><div class="qs-tiny">Plataformas e sistemas, ferramentas de comunicação</div></div>
-        <div class="qs-card qs-purple"><b>Parcerias</b><div class="qs-tiny">Instituições nacionais e internacionais</div></div>
-      </div>
+    <div class="panel" style="text-align:center;">
+      <img src="estrutura-rede.png" alt="Estrutura da Rede CAPES Global" style="max-width:100%;height:auto;border-radius:8px;">
     </div>
+
 
     <div class="panel" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
       <div>
