@@ -299,16 +299,16 @@ const BR_PINS = {
 };
 
 const BR_FIOCRUZ_UNITS = [
-  {x:239.2, y:176.3, tx:175, ty:105, anchor:'end', label:'FIOCRUZ AMAZONAS', sub:'e Instituto Leônidas e Maria Deane (ILMD)'},
+  {x:239.2, y:176.3, tx:285, ty:105, anchor:'start', label:'FIOCRUZ AMAZONAS', sub:'e Instituto Leônidas e Maria Deane (ILMD)'},
   {x:133.7, y:280.2, tx:20, ty:320, anchor:'start', label:'COLLABORATIVE LABORATORY', sub:'Fiocruz/Fundhacre/Mérieux Foundation (Acre)'},
   {x:187.8, y:268.6, tx:205, ty:320, anchor:'start', label:'FIOCRUZ RONDÔNIA', sub:''},
   {x:472.0, y:235.0, tx:410, ty:255, anchor:'end', label:'FIOCRUZ PIAUÍ', sub:''},
   {x:530.2, y:185.4, tx:610, ty:145, anchor:'start', label:'FIOCRUZ CEARÁ', sub:''},
   {x:578.9, y:251.2, tx:655, ty:235, anchor:'start', label:'FIOCRUZ PERNAMBUCO', sub:'Instituto Aggeu Magalhães (IAM)'},
   {x:530.2, y:325.6, tx:610, ty:335, anchor:'start', label:'FIOCRUZ BAHIA', sub:'Instituto Gonçalo Muniz (IGM)'},
-  {x:403.0, y:368.4, tx:320, ty:340, anchor:'end', label:'GERÊNCIA REGIONAL DE BRASÍLIA', sub:'(GEREB)'},
+  {x:403.0, y:368.4, tx:320, ty:358, anchor:'end', label:'GERÊNCIA REGIONAL DE BRASÍLIA', sub:'(GEREB)'},
   {x:457.1, y:430.4, tx:545, ty:415, anchor:'start', label:'FIOCRUZ MINAS GERAIS', sub:'Instituto René Rachou (IRR)'},
-  {x:404.3, y:450.1, tx:320, ty:475, anchor:'end', label:'PLATAFORMA DE PESQUISA', sub:'com a USP Ribeirão Preto'},
+  {x:404.3, y:450.1, tx:545, ty:452, anchor:'start', label:'PLATAFORMA DE PESQUISA', sub:'com a USP Ribeirão Preto'},
   {x:330.0, y:460.0, tx:245, ty:495, anchor:'end', label:'FIOCRUZ MATO GROSSO DO SUL', sub:''},
   {x:384.0, y:513.6, tx:330, ty:560, anchor:'end', label:'FIOCRUZ PARANÁ', sub:'Instituto Carlos Chagas (ICC) / IBMP'},
 ];
@@ -351,34 +351,11 @@ function pageQuemSomos() {
         ${fiocruzUnits}
         ${pinsAndLabels}
       </svg>
-      <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;margin-top:18px;">
-        <div style="background:var(--navy);color:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;position:relative;overflow:hidden;">
-          <svg viewBox="0 0 140 120" style="position:absolute;right:-10px;bottom:-14px;width:150px;height:130px;opacity:.45;pointer-events:none;">
-            <g stroke="#7dd3fc" stroke-width="1">
-              <line x1="70" y1="60" x2="120" y2="20"/><line x1="70" y1="60" x2="130" y2="70"/>
-              <line x1="70" y1="60" x2="105" y2="110"/><line x1="70" y1="60" x2="25" y2="95"/>
-              <line x1="70" y1="60" x2="20" y2="30"/><line x1="120" y1="20" x2="130" y2="70"/>
-              <line x1="130" y1="70" x2="105" y2="110"/><line x1="20" y1="30" x2="25" y2="95"/>
-            </g>
-            <circle cx="70" cy="60" r="6" fill="#e0f2fe"/>
-            <circle cx="120" cy="20" r="3.5" fill="#93c5fd"/><circle cx="130" cy="70" r="3.5" fill="#93c5fd"/>
-            <circle cx="105" cy="110" r="3.5" fill="#93c5fd"/><circle cx="25" cy="95" r="3.5" fill="#93c5fd"/>
-            <circle cx="20" cy="30" r="3.5" fill="#93c5fd"/>
-          </svg>
-          <div style="font-family:'Space Grotesk';font-weight:700;font-size:14.5px;position:relative;z-index:1;max-width:78%;">A Rede: estrutura desenhada para combater as assimetrias regionais</div>
-        </div>
-        <div style="border:1.5px dashed var(--border); border-radius:10px; padding:16px 18px; background:var(--blue-light);position:relative;overflow:hidden;">
-          <svg viewBox="0 0 120 120" style="position:absolute;right:-16px;top:-16px;width:120px;height:120px;opacity:.5;pointer-events:none;">
-            <circle cx="60" cy="60" r="42" fill="none" stroke="#2563a8" stroke-width="1.2"/>
-            <ellipse cx="60" cy="60" rx="42" ry="16" fill="none" stroke="#2563a8" stroke-width="1"/>
-            <ellipse cx="60" cy="60" rx="16" ry="42" fill="none" stroke="#2563a8" stroke-width="1"/>
-            <line x1="18" y1="60" x2="102" y2="60" stroke="#2563a8" stroke-width="1"/>
-            <circle cx="60" cy="18" r="3" fill="#2563a8"/><circle cx="88" cy="88" r="3" fill="#c98a2a"/>
-            <circle cx="28" cy="80" r="3" fill="#2563a8"/>
-          </svg>
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;margin-bottom:6px;position:relative;z-index:1;">Objetivo central</div>
-          <div style="font-size:12.5px;color:var(--text);line-height:1.6;position:relative;z-index:1;max-width:85%;">Promover a cooperação com o <b>Sul Global</b> e o <b>Norte</b>, elevando a internacionalização de IES/IP com diferentes estágios de desenvolvimento.</div>
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;">
+        <img src="arte-assimetrias.png" alt="Estrutura desenhada para combater as assimetrias regionais" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);">
+        <img src="arte-objetivo.png" alt="Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);">
+      </div>
+      <div style="margin-top:14px;">
         <table>
           <tr><th>Instituição</th><th>Cidade</th></tr>
           ${Object.entries(BR_PINS).map(([k,p]) => `<tr><td>${p.hub ? k+' (coordenação)' : k}</td><td>${p.label.split(' — ')[0]}</td></tr>`).join('')}
