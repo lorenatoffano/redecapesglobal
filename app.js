@@ -316,17 +316,21 @@ const BR_FIOCRUZ_UNITS = [
 function pageQuemSomos() {
   const palette = ['#3d6fa8','#5588c2','#2c5384','#6f9bcf','#274468','#7fabdb'];
   const statesPaths = BR_STATES.map((s,i) => `<path d="${s.d}" fill="${palette[i % palette.length]}" stroke="#f5f8fc" stroke-width="1.3"/>`).join('');
-  const pinsAndLabels = Object.entries(BR_PINS).map(([k,p]) => `
+  const pinLines = Object.entries(BR_PINS).map(([k,p]) => `
     <line x1="${p.lx}" y1="${p.ly}" x2="${p.x}" y2="${p.y}" stroke="#7a1f2b" stroke-width="0.9"/>
+  `).join('');
+  const pinsAndLabels = Object.entries(BR_PINS).map(([k,p]) => `
     <circle cx="${p.x}" cy="${p.y}" r="${p.hub?6:4.5}" fill="${p.hub?'#c0392b':'#ffffff'}" stroke="#7a1f2b" stroke-width="1.6"/>
-    <text x="${p.lx}" y="${p.ly-4}" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14.5" fill="#7a1f2b">${k}</text>
+    <text x="${p.lx}" y="${p.ly-4}" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="14.5" fill="#7a1f2b" stroke="#f5f8fc" stroke-width="4" paint-order="stroke" stroke-linejoin="round">${k}</text>
     <line x1="${p.lx-24}" y1="${p.ly+1}" x2="${p.lx+24}" y2="${p.ly+1}" stroke="#7a1f2b" stroke-width="1.4"/>
   `).join('');
+  const unitLines = BR_FIOCRUZ_UNITS.map(u => `
+    <line x1="${u.tx}" y1="${u.ty+2}" x2="${u.x}" y2="${u.y}" stroke="#4a6a85" stroke-width="0.6"/>
+  `).join('');
   const fiocruzUnits = BR_FIOCRUZ_UNITS.map(u => `
-    <line x1="${u.tx}" y1="${u.ty+2}" x2="${u.x}" y2="${u.y}" stroke="#1a3d5c" stroke-width="0.6"/>
     <circle cx="${u.x}" cy="${u.y}" r="3" fill="#ffffff" stroke="#1a3d5c" stroke-width="1.2"/>
-    <text x="${u.tx}" y="${u.ty}" text-anchor="${u.anchor}" font-family="Inter" font-weight="700" font-size="7.5" fill="#1a3d5c">${u.label}</text>
-    ${u.sub ? `<text x="${u.tx}" y="${u.ty+9}" text-anchor="${u.anchor}" font-family="Inter" font-weight="400" font-size="6.8" fill="#4a6a85">${u.sub}</text>` : ''}
+    <text x="${u.tx}" y="${u.ty}" text-anchor="${u.anchor}" font-family="Inter" font-weight="700" font-size="7.5" fill="#0f2a4a" stroke="#f5f8fc" stroke-width="2.6" paint-order="stroke" stroke-linejoin="round">${u.label}</text>
+    ${u.sub ? `<text x="${u.tx}" y="${u.ty+9}" text-anchor="${u.anchor}" font-family="Inter" font-weight="500" font-size="6.8" fill="#33566f" stroke="#f5f8fc" stroke-width="2.2" paint-order="stroke" stroke-linejoin="round">${u.sub}</text>` : ''}
   `).join('');
 
   return `
@@ -342,20 +346,42 @@ function pageQuemSomos() {
     <div class="panel">
       <svg viewBox="0 0 780 680" style="width:100%;max-width:820px;display:block;margin:0 auto;background:#f5f8fc;border-radius:12px;border:1px solid var(--border);">
         ${statesPaths}
+        ${unitLines}
+        ${pinLines}
         ${fiocruzUnits}
         ${pinsAndLabels}
       </svg>
       <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;margin-top:18px;">
-        <div style="background:var(--navy);color:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;">
-          <div style="font-family:'Space Grotesk';font-weight:700;font-size:14.5px;">A Rede: estrutura desenhada para combater as assimetrias regionais</div>
+        <div style="background:var(--navy);color:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;position:relative;overflow:hidden;">
+          <svg viewBox="0 0 140 120" style="position:absolute;right:-10px;bottom:-14px;width:150px;height:130px;opacity:.45;pointer-events:none;">
+            <g stroke="#7dd3fc" stroke-width="1">
+              <line x1="70" y1="60" x2="120" y2="20"/><line x1="70" y1="60" x2="130" y2="70"/>
+              <line x1="70" y1="60" x2="105" y2="110"/><line x1="70" y1="60" x2="25" y2="95"/>
+              <line x1="70" y1="60" x2="20" y2="30"/><line x1="120" y1="20" x2="130" y2="70"/>
+              <line x1="130" y1="70" x2="105" y2="110"/><line x1="20" y1="30" x2="25" y2="95"/>
+            </g>
+            <circle cx="70" cy="60" r="6" fill="#e0f2fe"/>
+            <circle cx="120" cy="20" r="3.5" fill="#93c5fd"/><circle cx="130" cy="70" r="3.5" fill="#93c5fd"/>
+            <circle cx="105" cy="110" r="3.5" fill="#93c5fd"/><circle cx="25" cy="95" r="3.5" fill="#93c5fd"/>
+            <circle cx="20" cy="30" r="3.5" fill="#93c5fd"/>
+          </svg>
+          <div style="font-family:'Space Grotesk';font-weight:700;font-size:14.5px;position:relative;z-index:1;max-width:78%;">A Rede: estrutura desenhada para combater as assimetrias regionais</div>
         </div>
-        <div style="border:1.5px dashed var(--border); border-radius:10px; padding:16px 18px; background:var(--blue-light);">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;margin-bottom:6px;">Objetivo central</div>
-          <div style="font-size:12.5px;color:var(--text);line-height:1.6;">Promover a cooperação com o <b>Sul Global</b> e o <b>Norte</b>, elevando a internacionalização de IES/IP com diferentes estágios de desenvolvimento.</div>
+        <div style="border:1.5px dashed var(--border); border-radius:10px; padding:16px 18px; background:var(--blue-light);position:relative;overflow:hidden;">
+          <svg viewBox="0 0 120 120" style="position:absolute;right:-16px;top:-16px;width:120px;height:120px;opacity:.5;pointer-events:none;">
+            <circle cx="60" cy="60" r="42" fill="none" stroke="#2563a8" stroke-width="1.2"/>
+            <ellipse cx="60" cy="60" rx="42" ry="16" fill="none" stroke="#2563a8" stroke-width="1"/>
+            <ellipse cx="60" cy="60" rx="16" ry="42" fill="none" stroke="#2563a8" stroke-width="1"/>
+            <line x1="18" y1="60" x2="102" y2="60" stroke="#2563a8" stroke-width="1"/>
+            <circle cx="60" cy="18" r="3" fill="#2563a8"/><circle cx="88" cy="88" r="3" fill="#c98a2a"/>
+            <circle cx="28" cy="80" r="3" fill="#2563a8"/>
+          </svg>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;margin-bottom:6px;position:relative;z-index:1;">Objetivo central</div>
+          <div style="font-size:12.5px;color:var(--text);line-height:1.6;position:relative;z-index:1;max-width:85%;">Promover a cooperação com o <b>Sul Global</b> e o <b>Norte</b>, elevando a internacionalização de IES/IP com diferentes estágios de desenvolvimento.</div>
         </div>
         <table>
           <tr><th>Instituição</th><th>Cidade</th></tr>
-          ${Object.entries(BR_PINS).map(([k,p]) => `<tr><td>${p.hub ? '⭐ '+k : k}</td><td>${p.label.split(' — ')[0]}</td></tr>`).join('')}
+          ${Object.entries(BR_PINS).map(([k,p]) => `<tr><td>${p.hub ? k+' (coordenação)' : k}</td><td>${p.label.split(' — ')[0]}</td></tr>`).join('')}
         </table>
       </div>
       <p style="font-size:11px;color:var(--muted);margin-top:14px;">Em bordô, as 6 instituições da Rede CAPES Global. Em azul-marinho, as unidades e institutos regionais da Fiocruz que ampliam a presença da rede pelo país.</p>
