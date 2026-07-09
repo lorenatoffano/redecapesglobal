@@ -299,7 +299,7 @@ const BR_PINS = {
 };
 
 const BR_FIOCRUZ_UNITS = [
-  {x:239.2, y:176.3, tx:285, ty:105, anchor:'start', label:'FIOCRUZ AMAZONAS', sub:'e Instituto Leônidas e Maria Deane (ILMD)'},
+  {x:239.2, y:176.3, tx:225, ty:100, anchor:'middle', label:'FIOCRUZ AMAZONAS', sub:'e Instituto Leônidas e Maria Deane (ILMD)'},
   {x:133.7, y:280.2, tx:20, ty:320, anchor:'start', label:'COLLABORATIVE LABORATORY', sub:'Fiocruz/Fundhacre/Mérieux Foundation (Acre)'},
   {x:187.8, y:268.6, tx:205, ty:320, anchor:'start', label:'FIOCRUZ RONDÔNIA', sub:''},
   {x:472.0, y:235.0, tx:410, ty:255, anchor:'end', label:'FIOCRUZ PIAUÍ', sub:''},
@@ -325,7 +325,7 @@ function pageQuemSomos() {
     <line x1="${p.lx-24}" y1="${p.ly+1}" x2="${p.lx+24}" y2="${p.ly+1}" stroke="#7a1f2b" stroke-width="1.4"/>
   `).join('');
   const unitLines = BR_FIOCRUZ_UNITS.map(u => `
-    <line x1="${u.tx}" y1="${u.ty+2}" x2="${u.x}" y2="${u.y}" stroke="#4a6a85" stroke-width="0.6"/>
+    <line x1="${u.tx}" y1="${u.anchor === 'middle' ? u.ty + 13 : u.ty + 2}" x2="${u.x}" y2="${u.y}" stroke="#4a6a85" stroke-width="0.6"/>
   `).join('');
   const fiocruzUnits = BR_FIOCRUZ_UNITS.map(u => `
     <circle cx="${u.x}" cy="${u.y}" r="3" fill="#ffffff" stroke="#1a3d5c" stroke-width="1.2"/>
@@ -351,9 +351,8 @@ function pageQuemSomos() {
         ${fiocruzUnits}
         ${pinsAndLabels}
       </svg>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;">
-        <img src="arte-assimetrias.png" alt="Estrutura desenhada para combater as assimetrias regionais" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);">
-        <img src="arte-objetivo.png" alt="Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);">
+      <div style="margin-top:18px;">
+        <img src="arte-rede.png" alt="Estrutura desenhada para combater as assimetrias regionais — Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);display:block;">
       </div>
       <div style="margin-top:14px;">
         <table>
