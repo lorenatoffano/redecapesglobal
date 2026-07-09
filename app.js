@@ -344,13 +344,22 @@ function pageQuemSomos() {
 
     <div class="section-title">A Rede pelo Brasil</div>
     <div class="panel">
-      <svg viewBox="0 0 780 680" style="width:100%;max-width:820px;display:block;margin:0 auto;background:#f5f8fc;border-radius:12px;border:1px solid var(--border);">
-        ${statesPaths}
-        ${unitLines}
-        ${pinLines}
-        ${fiocruzUnits}
-        ${pinsAndLabels}
-      </svg>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+        <svg viewBox="0 0 780 680" style="flex:1.7;min-width:420px;background:#f5f8fc;border-radius:12px;border:1px solid var(--border);">
+          ${statesPaths}
+          ${unitLines}
+          ${pinLines}
+          ${fiocruzUnits}
+          ${pinsAndLabels}
+        </svg>
+        <div style="flex:1;min-width:210px;">
+          <table>
+            <tr><th>Instituição</th><th>Cidade</th></tr>
+            ${Object.entries(BR_PINS).map(([k,p]) => `<tr><td>${p.hub ? k+' (coordenação)' : k}</td><td>${p.label.split(' — ')[0]}</td></tr>`).join('')}
+          </table>
+          <p style="font-size:11px;color:var(--muted);margin-top:14px;line-height:1.6;">Em bordô, as 6 instituições da Rede CAPES Global. Em azul-marinho, as unidades e institutos regionais da Fiocruz que ampliam a presença da rede pelo país.</p>
+        </div>
+      </div>
       <div class="qs-duo" style="margin-top:18px;">
         <div class="qs-duo-card">
           <svg class="qs-duo-bg" viewBox="0 0 400 260" preserveAspectRatio="none">
@@ -383,13 +392,6 @@ function pageQuemSomos() {
           </div>
         </div>
       </div>
-      <div style="margin-top:14px;">
-        <table>
-          <tr><th>Instituição</th><th>Cidade</th></tr>
-          ${Object.entries(BR_PINS).map(([k,p]) => `<tr><td>${p.hub ? k+' (coordenação)' : k}</td><td>${p.label.split(' — ')[0]}</td></tr>`).join('')}
-        </table>
-      </div>
-      <p style="font-size:11px;color:var(--muted);margin-top:14px;">Em bordô, as 6 instituições da Rede CAPES Global. Em azul-marinho, as unidades e institutos regionais da Fiocruz que ampliam a presença da rede pelo país.</p>
     </div>
 
     <div class="section-title">Estrutura da rede</div>
