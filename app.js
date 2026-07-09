@@ -351,8 +351,37 @@ function pageQuemSomos() {
         ${fiocruzUnits}
         ${pinsAndLabels}
       </svg>
-      <div style="margin-top:18px;">
-        <img src="arte-rede.png" alt="Estrutura desenhada para combater as assimetrias regionais — Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;max-width:640px;height:auto;border-radius:10px;border:1px solid var(--border);display:block;margin:0 auto;">
+      <div class="qs-duo" style="margin-top:18px;">
+        <div class="qs-duo-card">
+          <svg class="qs-duo-bg" viewBox="0 0 400 260" preserveAspectRatio="none">
+            <g fill="#5588c2" opacity=".35">
+              ${[0,1,2,3,4].map(r => [0,1,2,3,4,5].map(c => `<circle cx="${18+c*13}" cy="${16+r*12}" r="1.6" opacity="${(1-(r+c)/10).toFixed(2)}"/>`).join('')).join('')}
+            </g>
+            <path d="M0,210 C80,180 150,240 240,210 C320,185 370,215 400,200 L400,260 L0,260 Z" fill="#dbeafe" opacity=".55"/>
+            <path d="M0,230 C90,205 170,255 260,228 C330,208 375,232 400,222 L400,260 L0,260 Z" fill="#93c5fd" opacity=".45"/>
+            <path d="M0,245 C100,228 190,262 290,242 C350,230 380,244 400,238 L400,260 L0,260 Z" fill="#3b82f6" opacity=".35"/>
+          </svg>
+          <div class="qs-duo-content">
+            <div style="font-size:13px;font-weight:600;color:#1c2b3a;letter-spacing:.01em;">ESTRUTURA DESENHADA PARA</div>
+            <div style="font-family:'Space Grotesk';font-weight:700;font-size:26px;line-height:1.15;color:#0f2a4a;margin-top:2px;">COMBATER<br><span style="color:#2563a8;">AS ASSIMETRIAS</span><br>REGIONAIS.</div>
+            <div style="width:120px;height:3px;background:linear-gradient(90deg,#0f2a4a,#3b82f6);border-radius:2px;margin-top:14px;"></div>
+          </div>
+        </div>
+        <div class="qs-duo-card">
+          <svg class="qs-duo-bg" viewBox="0 0 400 260" preserveAspectRatio="none">
+            <g fill="#5588c2" opacity=".35">
+              ${[0,1,2,3,4].map(r => [0,1,2,3,4,5].map(c => `<circle cx="${382-c*13}" cy="${16+r*12}" r="1.6" opacity="${(1-(r+c)/10).toFixed(2)}"/>`).join('')).join('')}
+            </g>
+            <path d="M0,215 C80,190 160,245 250,215 C325,192 372,218 400,206 L400,260 L0,260 Z" fill="#dbeafe" opacity=".55"/>
+            <path d="M0,235 C95,210 180,258 270,232 C335,214 378,236 400,226 L400,260 L0,260 Z" fill="#93c5fd" opacity=".45"/>
+          </svg>
+          <div class="qs-duo-content">
+            <div style="font-size:12px;font-weight:600;color:#1c2b3a;letter-spacing:.06em;text-transform:uppercase;">Objetivo Central</div>
+            <div style="width:56px;height:3px;background:#3b82f6;border-radius:2px;margin:8px 0 12px;"></div>
+            <div style="font-family:'Space Grotesk';font-weight:700;font-size:16.5px;line-height:1.45;color:#0f2a4a;">PROMOVER A <span style="color:#2563a8;">COOPERAÇÃO</span> COM O <span style="color:#2563a8;">SUL GLOBAL E O NORTE</span>, ELEVANDO A INTERNACIONALIZAÇÃO DE <span style="color:#2563a8;">IES/IP</span> COM DIFERENTES <span style="color:#2563a8;">ESTÁGIOS DE DESENVOLVIMENTO.</span></div>
+            <div style="width:120px;height:3px;background:linear-gradient(90deg,#0f2a4a,#3b82f6);border-radius:2px;margin-top:14px;"></div>
+          </div>
+        </div>
       </div>
       <div style="margin-top:14px;">
         <table>
