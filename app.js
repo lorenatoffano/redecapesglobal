@@ -352,7 +352,7 @@ function pageQuemSomos() {
         ${pinsAndLabels}
       </svg>
       <div style="margin-top:18px;">
-        <img src="arte-rede.png" alt="Estrutura desenhada para combater as assimetrias regionais — Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border);display:block;">
+        <img src="arte-rede.png" alt="Estrutura desenhada para combater as assimetrias regionais — Objetivo central: promover a cooperação com o Sul Global e o Norte" style="width:100%;max-width:640px;height:auto;border-radius:10px;border:1px solid var(--border);display:block;margin:0 auto;">
       </div>
       <div style="margin-top:14px;">
         <table>
