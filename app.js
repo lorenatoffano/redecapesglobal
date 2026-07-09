@@ -147,22 +147,37 @@ function afterHeatmap(paisesObj, opts) {
 // ============================================================
 // Navigation config
 // ============================================================
+const ICONS = {
+  quemsomos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9s-1.4 6.4-3.9 9c-2.5-2.6-3.9-5.7-3.9-9s1.4-6.4 3.9-9z"/></svg>',
+  dashboard: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="17" rx="1"/></svg>',
+  cg: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 19c0-3 2.7-5 6-5s6 2 6 5v1H2zM13.5 14.6c.8-.4 1.7-.6 2.5-.6 3.3 0 6 2 6 5v1h-7v-1c0-1.7-.6-3.2-1.5-4.4z"/></svg>',
+  instituicoes: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 8v2h20V8L12 2zM4 11v7H2v2h20v-2h-2v-7h-3v7h-3v-7h-4v7H7v-7H4z"/></svg>',
+  temas: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 8l10 5 10-5-10-5zM4.5 11.3L2 12.5l10 5 10-5-2.5-1.2L12 15 4.5 11.3zM4.5 15.8L2 17l10 5 10-5-2.5-1.2L12 19.5l-7.5-3.7z"/></svg>',
+  bolsas: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l11 6 9-4.9V17h2V9L12 3zM5 13.2V17c0 1.7 3.1 3.5 7 3.5s7-1.8 7-3.5v-3.8l-7 3.8-7-3.8z"/></svg>',
+  missoes: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 2L2 10.5l6.5 2.2L11 20l3-5 6 3L22 2zM9.5 13.5L19 5l-8 9.5-1.5-1z"/></svg>',
+  ri: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg>',
+  eventos: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v3M17 2v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="3" y="4" width="18" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 9h18" stroke="currentColor" stroke-width="2"/><rect x="7" y="12" width="3" height="3" rx=".5"/><rect x="14" y="12" width="3" height="3" rx=".5"/></svg>',
+  comunicacao: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10v4c0 .6.4 1 1 1h2l4 4c.6.6 1.7.2 1.7-.7V5.7c0-.9-1.1-1.3-1.7-.7L6 9H4c-.6 0-1 .4-1 1zM14 8.5c1.2.8 2 2 2 3.5s-.8 2.7-2 3.5v-7zM14 4.6c3 1.1 5 3.9 5 7.4s-2 6.3-5 7.4v-2.1c1.8-1 3-2.9 3-5.3s-1.2-4.3-3-5.3V4.6z"/></svg>',
+  metas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>',
+  ppgs: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 5c-2-1.5-4.5-2-7-2-.6 0-1 .4-1 1v14c0 .6.4 1 1 1 2.5 0 5 .5 7 2 2-1.5 4.5-2 7-2 .6 0 1-.4 1-1V4c0-.6-.4-1-1-1-2.5 0-5 .5-7 2zm0 2.2c1.6-1 3.6-1.6 6-1.7v11.1c-2.2.1-4.3.6-6 1.6V7.2zM6 5.5c2.4.1 4.4.7 6 1.7v11c-1.7-1-3.8-1.5-6-1.6V5.5z" fill-rule="evenodd"/></svg>',
+};
+
 const NAV = [
-  { id:'quemsomos', label:'Quem Somos', icon:'🌐' },
-  { id:'dashboard', label:'Dashboard', icon:'📊' },
-  { id:'cg', label:'Comitê Gestor', icon:'💼' },
-  { id:'instituicoes', label:'Instituições', icon:'🏛️', children: Object.keys(DATA.instituicoes).map(n => ({id:'inst_'+n, label:n})) },
-  { id:'temas', label:'Temas', icon:'📚', children: [
+  { id:'quemsomos', label:'Quem Somos', icon:ICONS.quemsomos },
+  { id:'dashboard', label:'Dashboard', icon:ICONS.dashboard },
+  { id:'cg', label:'Comitê Gestor', icon:ICONS.cg },
+  { id:'instituicoes', label:'Instituições', icon:ICONS.instituicoes, children: Object.keys(DATA.instituicoes).map(n => ({id:'inst_'+n, label:n})) },
+  { id:'temas', label:'Temas', icon:ICONS.temas, children: [
       {id:'tema_overview', label:'Visão Geral'},
       ...Object.keys(DATA.temas).map(n => ({id:'tema_'+n.replace(' ',''), label:n, key:n}))
     ]},
-  { id:'bolsas', label:'Bolsas', icon:'🎒' },
-  { id:'missoes', label:'Missões', icon:'✈️' },
-  { id:'ri', label:'Relações Internacionais', icon:'🌍' },
-  { id:'eventos', label:'Eventos', icon:'👩‍🏫' },
-  { id:'comunicacao', label:'Comunicação', icon:'📢' },
-  { id:'metas', label:'Metas', icon:'🎯' },
-  { id:'ppgs', label:'PPG\'s', icon:'🎓' },
+  { id:'bolsas', label:'Bolsas', icon:ICONS.bolsas },
+  { id:'missoes', label:'Missões', icon:ICONS.missoes },
+  { id:'ri', label:'Relações Internacionais', icon:ICONS.ri },
+  { id:'eventos', label:'Eventos', icon:ICONS.eventos },
+  { id:'comunicacao', label:'Comunicação', icon:ICONS.comunicacao },
+  { id:'metas', label:'Metas', icon:ICONS.metas },
+  { id:'ppgs', label:'PPG\'s', icon:ICONS.ppgs },
 ];
 
 const TITLES = { quemsomos:['Quem Somos','Rede CAPES Global para o Desenvolvimento Sustentável, Ciência e Saúde.'],
@@ -188,7 +203,7 @@ function buildNav() {
     if (item.children) {
       const wrap = document.createElement('div');
       const head = document.createElement('div');
-      head.className = 'nav-item';
+      head.className = 'nav-item lvl0';
       head.innerHTML = `<span class="ic">${item.icon}</span><span>${item.label}</span><span class="chev">▶</span>`;
       const sub = document.createElement('div');
       sub.className = 'submenu';
@@ -205,7 +220,7 @@ function buildNav() {
       root.appendChild(wrap);
     } else {
       const el = document.createElement('div');
-      el.className = 'nav-item';
+      el.className = 'nav-item lvl0';
       el.dataset.route = item.id;
       el.innerHTML = `<span class="ic">${item.icon}</span><span>${item.label}</span>`;
       el.onclick = () => navigate(item.id);
