@@ -153,7 +153,7 @@ function afterHeatmap(paisesObj, opts) {
 // Navigation config
 // ============================================================
 const ICONS = {
-  quemsomos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9s-1.4 6.4-3.9 9c-2.5-2.6-3.9-5.7-3.9-9s1.4-6.4 3.9-9z"/></svg>',
+  quemsomos: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="6.2"/><ellipse cx="12" cy="12" rx="6.2" ry="2.4"/><path d="M12 5.8v12.4"/><path d="M12 12L18.6 5.4M12 12L5.2 7.6M12 12l6 5.6M12 12l-6.4 5" stroke-dasharray="1.6 1.7" stroke-width="1.3"/><circle cx="18.6" cy="5.4" r="2.3" fill="currentColor" stroke="none"/><circle cx="5.2" cy="7.6" r="2.3" fill="currentColor" stroke="none"/><circle cx="18" cy="17.6" r="2.3" fill="currentColor" stroke="none"/><circle cx="5.6" cy="17" r="2.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>',
   dashboard: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="7" width="4" height="13" rx="1"/><rect x="16" y="3" width="4" height="17" rx="1"/></svg>',
   cg: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 19c0-3 2.7-5 6-5s6 2 6 5v1H2zM13.5 14.6c.8-.4 1.7-.6 2.5-.6 3.3 0 6 2 6 5v1h-7v-1c0-1.7-.6-3.2-1.5-4.4z"/></svg>',
   instituicoes: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 8v2h20V8L12 2zM4 11v7H2v2h20v-2h-2v-7h-3v7h-3v-7h-4v7H7v-7H4z"/></svg>',
@@ -168,7 +168,7 @@ const ICONS = {
 };
 
 const NAV = [
-  { id:'quemsomos', label:'Quem Somos', icon:ICONS.quemsomos },
+  { id:'quemsomos', label:'Sobre a Rede', icon:ICONS.quemsomos },
   { id:'dashboard', label:'Dashboard', icon:ICONS.dashboard },
   { id:'cg', label:'Comitê Gestor', icon:ICONS.cg },
   { id:'instituicoes', label:'Instituições', icon:ICONS.instituicoes, children: Object.keys(DATA.instituicoes).map(n => ({id:'inst_'+n, label:n})) },
@@ -185,7 +185,7 @@ const NAV = [
   { id:'ppgs', label:'PPG\'s', icon:ICONS.ppgs },
 ];
 
-const TITLES = { quemsomos:['Quem Somos','Rede CAPES Global para o Desenvolvimento Sustentável, Ciência e Saúde.'],
+const TITLES = { quemsomos:['Sobre a Rede','Rede CAPES Global para o Desenvolvimento Sustentável, Ciência e Saúde.'],
   dashboard:['Dashboard','Visão geral da execução orçamentária da rede.'],
   cg:['Comitê Gestor','Orçamento por ano e instituição, consolidado do Comitê Gestor.'],
   bolsas:['Bolsas','Bolsas por modalidade, instituição, tema e produção científica associada.'],
@@ -246,9 +246,24 @@ function setActiveNav(route) {
 // ============================================================
 // Router
 // ============================================================
-function navigate(route) { location.hash = route; }
+function navigate(route) { location.hash = route; closeSidebar(); }
+function closeSidebar() {
+  const sb = document.getElementById('sidebar');
+  const bd = document.getElementById('backdrop');
+  if (sb) sb.classList.remove('open');
+  if (bd) bd.classList.remove('show');
+}
 window.addEventListener('hashchange', render);
-window.addEventListener('DOMContentLoaded', () => { buildNav(); render(); });
+window.addEventListener('DOMContentLoaded', () => {
+  buildNav(); render();
+  const mt = document.getElementById('menuToggle');
+  const sb = document.getElementById('sidebar');
+  const bd = document.getElementById('backdrop');
+  if (mt && sb && bd) {
+    mt.onclick = () => { sb.classList.add('open'); bd.classList.add('show'); };
+    bd.onclick = closeSidebar;
+  }
+});
 
 function render() {
   const route = (location.hash || '#quemsomos').slice(1);
