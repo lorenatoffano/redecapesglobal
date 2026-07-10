@@ -113,6 +113,11 @@ function afterHeatmap(paisesObj, opts) {
 
   const svgEl = document.getElementById('worldMap');
   if (!svgEl) return;
+  if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
+    const box = document.getElementById('mapBox');
+    if (box) box.innerHTML = '<p style="color:var(--muted);font-size:12.5px;padding:20px;">Não foi possível carregar o mapa (verifique a conexão). Os dados por país continuam na tabela ao lado.</p>';
+    return;
+  }
   const svg = d3.select('#worldMap');
   const tooltip = document.getElementById('mapTooltip');
   const countryData = {};
@@ -250,22 +255,37 @@ function render() {
   setActiveNav(route);
   const root = document.getElementById('contentRoot');
 
-  if (route === 'quemsomos') { setTitle(...TITLES.quemsomos); root.innerHTML = pageQuemSomos(); }
-  else if (route === 'dashboard') { setTitle(...TITLES.dashboard); root.innerHTML = pageDashboard(); afterDashboard(); }
-  else if (route === 'cg') { setTitle(...TITLES.cg); root.innerHTML = pageCG(); afterCG(); }
-  else if (route.startsWith('inst_')) { const nome = route.slice(5); setTitle('Instituições - '+nome,'Orçamento e execução por ano - '+nome+'.'); root.innerHTML = pageInstituicao(nome); afterInstituicao(nome); }
-  else if (route === 'tema_overview') { setTitle(...TITLES.tema_overview); root.innerHTML = pageTemasOverview(); afterTemasOverview(); }
-  else if (route.startsWith('tema_')) { const key = findTemaKey(route); setTitle('Temas - '+key,'Orçamento e execução - '+key+'.'); root.innerHTML = pageTema(key); afterTema(key); }
-  else if (route === 'ppgs') { setTitle(...TITLES.ppgs); root.innerHTML = pagePPGs(); afterPPGs(); }
-  else if (route === 'bolsas') { setTitle(...TITLES.bolsas); root.innerHTML = pageBolsas(); afterBolsas(); }
-  else if (route === 'missoes') { setTitle(...TITLES.missoes); root.innerHTML = pageMissoes(); afterMissoes(); }
-  else if (route === 'ri') { setTitle(...TITLES.ri); root.innerHTML = pageRI(); afterRI(); }
-  else if (route === 'eventos') { setTitle(...TITLES.eventos); root.innerHTML = pageEventos(); afterEventos(); }
-  else if (route === 'comunicacao') { setTitle(...TITLES.comunicacao); root.innerHTML = pageComunicacao(); afterComunicacao(); }
-  else if (route === 'metas') { setTitle(...TITLES.metas); root.innerHTML = pageMetas(); }
-  else { setTitle(...TITLES.quemsomos); root.innerHTML = pageQuemSomos(); }
+  try {
+    if (route === 'quemsomos') { setTitle(...TITLES.quemsomos); root.innerHTML = pageQuemSomos(); }
+    else if (route === 'dashboard') { setTitle(...TITLES.dashboard); root.innerHTML = pageDashboard(); afterDashboard(); }
+    else if (route === 'cg') { setTitle(...TITLES.cg); root.innerHTML = pageCG(); afterCG(); }
+    else if (route.startsWith('inst_')) { const nome = route.slice(5); setTitle('Instituições - '+nome,'Orçamento e execução por ano - '+nome+'.'); root.innerHTML = pageInstituicao(nome); afterInstituicao(nome); }
+    else if (route === 'tema_overview') { setTitle(...TITLES.tema_overview); root.innerHTML = pageTemasOverview(); afterTemasOverview(); }
+    else if (route.startsWith('tema_')) { const key = findTemaKey(route); setTitle('Temas - '+key,'Orçamento e execução - '+key+'.'); root.innerHTML = pageTema(key); afterTema(key); }
+    else if (route === 'ppgs') { setTitle(...TITLES.ppgs); root.innerHTML = pagePPGs(); afterPPGs(); }
+    else if (route === 'bolsas') { setTitle(...TITLES.bolsas); root.innerHTML = pageBolsas(); afterBolsas(); }
+    else if (route === 'missoes') { setTitle(...TITLES.missoes); root.innerHTML = pageMissoes(); afterMissoes(); }
+    else if (route === 'ri') { setTitle(...TITLES.ri); root.innerHTML = pageRI(); afterRI(); }
+    else if (route === 'eventos') { setTitle(...TITLES.eventos); root.innerHTML = pageEventos(); afterEventos(); }
+    else if (route === 'comunicacao') { setTitle(...TITLES.comunicacao); root.innerHTML = pageComunicacao(); afterComunicacao(); }
+    else if (route === 'metas') { setTitle(...TITLES.metas); root.innerHTML = pageMetas(); }
+    else { setTitle(...TITLES.quemsomos); root.innerHTML = pageQuemSomos(); }
+  } finally {
+    syncHeaderAlignment();
+  }
 }
 function setTitle(t, s) { document.getElementById('pageTitle').textContent = t; document.getElementById('pageSubtitle').textContent = s || ''; }
+function syncHeaderAlignment() {
+  // Alinha o título de cada coluna com o alinhamento dos dados dela (colunas numéricas ficam à direita)
+  document.querySelectorAll('#contentRoot table').forEach(t => {
+    const dataRows = [...t.querySelectorAll('tr')].slice(1);
+    if (!dataRows.length) return;
+    [...t.querySelectorAll('th')].forEach((th, i) => {
+      const isNum = dataRows.some(r => { const td = r.querySelectorAll('td')[i]; return td && td.classList.contains('num'); });
+      th.classList.toggle('num', isNum);
+    });
+  });
+}
 function findTemaKey(route) {
   const item = NAV.find(n => n.id === 'temas').children.find(c => c.id === route);
   return item ? item.key : route;
