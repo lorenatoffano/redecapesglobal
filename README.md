@@ -1,11 +1,11 @@
-# Painel de Controle — Rede CAPES Global
+# Painel de Controle - Rede CAPES Global
 
 Painel único com navegação lateral, uma seção para cada aba da planilha de controle orçamentário.
 
 ## Arquivos
-- `index.html` — página principal (contém os dados atuais embutidos)
-- `app.js` — lógica de navegação e renderização dos gráficos/tabelas
-- `atualizar_dashboard.py` — script para atualizar os dados a partir de uma nova planilha
+- `index.html` - página principal (contém os dados atuais embutidos)
+- `app.js` - lógica de navegação e renderização dos gráficos/tabelas
+- `atualizar_dashboard.py` - script para atualizar os dados a partir de uma nova planilha
 
 ## Como publicar no GitHub Pages
 
